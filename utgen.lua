@@ -28,8 +28,32 @@ function lines_from(file)
   return lines
 end
 
+-- I/O
+print("Enter matches type (DM|CTF):")
+matchesType = io.read("*lines")
+print("Enter number of matches in the season:")
+nChampionshipMatches = io.read("*number")
+print("Enter number of matches in the finals:")
+nFinalMatches = io.read("*number")
+
+-- Simple check
+if (not (matchesType == "DM" or matchesType == "CTF") ) then
+  print("Invalid matches type")
+  os.exit(1)
+end
+
+if (matchesType == "CTF") then
+  filename = 'maps-CTF.txt'
+end
+
+
 -- Load from file
 local lines = lines_from(filename)
+
+if (nChampionshipMatches + nFinalMatches > #lines) then
+  print("Too much matches entered")
+  os.exit(1)
+end
 
 -- Shuffle entries
 math.randomseed( os.time() )
@@ -37,18 +61,6 @@ for i = 1, #lines*2 do -- repeat this for twice the amount of elements in the ta
   local a = math.random(#lines)
   local b = math.random(#lines)
   lines[a],lines[b] = lines[b],lines[a]
-end
-
--- I/O
-print("Enter number of matches in the season:")
-nChampionshipMatches = io.read("*number")
-print("Enter number of matches in the finals:")
-nFinalMatches = io.read("*number")
-
--- Simple check
-if (nChampionshipMatches + nFinalMatches > #lines) then
-  print("Too much matches entered")
-  os.exit(1)
 end
 
 -- Print championship maps
